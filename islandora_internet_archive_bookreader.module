@@ -71,7 +71,7 @@ function islandora_internet_archive_bookreader_islandora_viewer_info() {
       'description' => t('Internet Archive BookReader.'),
       'configuration' => 'admin/islandora/internet_archive_bookreader',
       'callback' => 'islandora_internet_archive_bookreader_viewer_callback',
-      'model' => array('islandora:iaBookCModel'),
+      'model' => array('islandora:bookCModel'),
     ),
   );
 }
