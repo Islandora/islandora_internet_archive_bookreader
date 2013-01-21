@@ -142,7 +142,7 @@ function islandora_internet_archive_bookreader_info_fields(FedoraObject $object)
     // Map values to each context node.
     array_walk($contexts, $query, $xpath);
     // Flatten to an array of values.
-    return call_user_func_array('array_merge', $contexts);
+    return count($contexts) ? call_user_func_array('array_merge', $contexts) : array();
   };
   // Query the given xpath. If the xpath is any array the first value is the
   // xpath for the context node(s) and the second the path to the value fields.
