@@ -35,7 +35,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
         'textUri' => url('internet_archive_bookreader_text/PID', array('absolute' => TRUE)),
         'djatokaUri' => variable_get('islandora_internet_archive_bookreader_djatoka_url', 'http://localhost:8080/adore-djatoka'),
         'resourceUri' => $resource_uri,
-        'imagesFolderUri' => url("$library_path/BookReader/images/", array('absolute' => TRUE)),
+        'imagesFolderUri' => url("$library_path/BookReader/images/", array('absolute' => TRUE, 'external' => TRUE)),
         'compression' => variable_get('islandora_internet_archive_bookreader_compression', '4'),
         'pageProgression' => $variables['page_progression'],
         'pages' => $variables['pages'],

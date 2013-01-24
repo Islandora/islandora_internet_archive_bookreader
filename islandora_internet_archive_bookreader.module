@@ -27,7 +27,7 @@ function islandora_internet_archive_bookreader_menu() {
       'file' => 'includes/text.callback.inc',
       'type' => MENU_CALLBACK,
     ),
-    'internet_archive_bookreader_search/%/%' => array(
+    'internet_archive_bookreader_search/%' => array(
       'page callback' => 'islandora_internet_archive_bookreader_search',
       'page arguments' => array(1, 2),
       'access callback' => 'user_access',

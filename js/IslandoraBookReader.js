@@ -213,7 +213,7 @@ function IslandoraBookReader(settings) {
   }
 
   /**
-   * @todo doubt this works.
+   * Search SOLR for the given term.
    */
   IslandoraBookReader.prototype.search = function(term) {
     var url = this.settings.searchUri.replace('TERM', encodeURI(term));
@@ -233,7 +233,29 @@ function IslandoraBookReader(settings) {
   }
 
   /**
-   * @x
+   * Display the Search Progress
+   */
+  IslandoraBookReader.prototype.showProgressPopup = function(msg) {
+    if (this.popup) return;
+    this.popup = document.createElement("div");
+    $(this.popup).css({
+        top:      '-' + ($('#BookReader').height()*0.5) + 'px',
+    }).attr('className', 'BRprogresspopup');
+    var bar = document.createElement("div");
+    $(bar).css({
+        height:   '20px'
+    }).attr('className', 'BRprogressbar');
+    $(this.popup).append(bar);
+    if (msg) {
+        var msgdiv = document.createElement("div");
+        msgdiv.innerHTML = msg;
+        $(this.popup).append(msgdiv);
+    }
+    $(this.popup).appendTo('#BookReader');
+  }
+
+  /**
+   * Search callback, displays results.
    */
   IslandoraBookReader.prototype.BRSearchCallback = function(results) {
     this.removeSearchResults();
@@ -246,9 +268,10 @@ function IslandoraBookReader(settings) {
         timeout = 5000;
       }
       $(this.popup).html(errStr);
+      var that = this;
       setTimeout(function(){
-        $(this.popup).fadeOut('slow', function() {
-          this.removeProgressPopup();
+        $(that.popup).fadeOut('slow', function() {
+          that.removeProgressPopup();
         })
       },timeout);
       return;
