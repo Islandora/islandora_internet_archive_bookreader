@@ -312,7 +312,7 @@ function IslandoraBookReader(settings) {
                    '.bookmark': 'Bookmark this page',
                    '.read': 'Read this book aloud',
                    '.share': 'Share this book',
-                   '.info': 'Page Text',
+                   '.info': 'Info',
                    '.full': 'Show fullscreen',
                    '.book_up': 'Page up',
                    '.book_down': 'Page down',
@@ -542,7 +542,7 @@ function IslandoraBookReader(settings) {
               jFullTextDiv.find('.BRfloatMeta').html(data);
             });
     } else if (3 == this.mode) {
-      jFullTextDiv.find('.BRfloatMeta').html('<div>Full Text Not supported for this view.</div>');
+      jFullTextDiv.find('.BRfloatMeta').html('<div>Full text not supported for this view.</div>');
     } else {
       var twoPageText = $([
       '<div class="textTop">',
