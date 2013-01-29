@@ -62,7 +62,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   drupal_add_js("$module_path/js/jquery.ui.ipad.js");
   drupal_add_js("$library_path/BookReader/jquery.bt.min.js");
   drupal_add_js("$library_path/BookReader/BookReader.js");
-  drupal_add_js("$module_path/js/IslandoraBookReader.js");
+  drupal_add_js("$module_path/js/islandora_book_reader.js");
   drupal_add_js("$module_path/js/islandora_internet_archive_bookreader.js");
 }
 
