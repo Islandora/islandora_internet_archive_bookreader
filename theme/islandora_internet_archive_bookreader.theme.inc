@@ -16,12 +16,11 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   $module_path = drupal_get_path('module', 'islandora_internet_archive_bookreader');
   $search_uri = module_exists('islandora_solr') ? url("internet_archive_bookreader_search/{$object->id}/TERM", array('absolute' => TRUE)) : NULL;
   $resource_uri = url("islandora/object/PID/datastream/{$dsid}/view", array('absolute' => TRUE));
-  $page_data = count($variables['pages']) ? islandora_internet_archive_bookreader_get_page_data($variables['pages'][0]) : array('width' => 0, 'height' => 0);
   // Get token to allow access to XACML protected datastreams if necessary.
   if (isset($object['POLICY'])) {
     module_load_include('inc', 'islandora', 'includes/islandora_authtokens');
     $token = islandora_get_object_token($object->id, $dsid, 2);
-    $resource_uri = url("islandora/object/{$islandora_object->id}/datastream/{$dsid}/view", array(
+    $resource_uri = url("islandora/object/PID/datastream/{$dsid}/view", array(
                       'absolute' => TRUE,
                       'query' => array('token' => $token),
                     ));
@@ -33,6 +32,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
         'label' => $object->label,
         'searchUri' => $search_uri,
         'textUri' => url('internet_archive_bookreader_text/PID', array('absolute' => TRUE)),
+        'dimensionsUri' => url('internet_archive_bookreader_dimensions/PID', array('absolute' => TRUE)),
         'djatokaUri' => variable_get('islandora_internet_archive_bookreader_djatoka_url', 'http://localhost:8080/adore-djatoka'),
         'resourceUri' => $resource_uri,
         'imagesFolderUri' => url("$library_path/BookReader/images/", array('absolute' => TRUE, 'external' => TRUE)),
@@ -40,10 +40,6 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
         'pageProgression' => $variables['page_progression'],
         'pages' => $variables['pages'],
         'pageCount' => count($variables['pages']),
-        // Use the same width and height for all pages, we will probably have to
-        // change this in the future.
-        'height' => $page_data['height'],
-        'width' => $page_data['width'],
       ),
     ), 'setting');
   drupal_add_css("$library_path/BookReader/BookReader.css");
