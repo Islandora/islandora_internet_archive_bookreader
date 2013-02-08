@@ -639,13 +639,26 @@ function IslandoraBookReader(settings) {
    * browsers can't handle that shit.
    */
   IslandoraBookReader.prototype.updateLocationHash = function() {
-    var newHash = this.fragmentFromParams(this.paramsFromCurrent());
+    var newHash = '#' + this.fragmentFromParams(this.paramsFromCurrent());
     if (this.oldLocationHash != newHash) {
       window.location.hash = newHash;
     }
     // This is the variable checked in the timer.  Only user-generated changes
     // to the URL will trigger the event.
     this.oldLocationHash = newHash;
+  }
+
+  /**
+   * Prepare to flip the current right page left.
+   *
+   * This is only overridden to deal with a bug in small books in that their css
+   * properties don't get reside because the page hasn't been removed from the
+   * prefetch pages list.
+   */
+  IslandoraBookReader.prototype.prepareFlipRightToLeft = function(nextL, nextR) {
+    $(this.prefetchedImgs[nextL]).removeAttr('style');
+    $(this.prefetchedImgs[nextR]).removeAttr('style');
+    BookReader.prototype.prepareFlipRightToLeft.call(this, nextL, nextR);
   }
 
 })(jQuery);
