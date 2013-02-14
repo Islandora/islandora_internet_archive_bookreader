@@ -62,7 +62,7 @@ function islandora_internet_archive_bookreader_theme() {
       ),
     ),
     'islandora_internet_archive_bookreader_book_info' => array(
-      'file' => 'theme/islandora_internet_archive_bookreader.theme.inc',
+      'file' => 'theme/theme.inc',
       'variables' => array('object' => NULL),
     ),
   );
