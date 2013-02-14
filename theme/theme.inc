@@ -15,16 +15,27 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   $library_path = libraries_get_path('bookreader');
   $module_path = drupal_get_path('module', 'islandora_internet_archive_bookreader');
   $search_uri = module_exists('islandora_solr') ? url("internet_archive_bookreader_search/{$object->id}/TERM", array('absolute' => TRUE)) : NULL;
-  $resource_uri = url("islandora/object/PID/datastream/{$dsid}/view", array('absolute' => TRUE));
-  // Get token to allow access to XACML protected datastreams if necessary.
-  if (isset($object['POLICY'])) {
-    module_load_include('inc', 'islandora', 'includes/authtokens');
-    $token = islandora_get_object_token($object->id, $dsid, 2);
-    $resource_uri = url("islandora/object/PID/datastream/{$dsid}/view", array(
-                      'absolute' => TRUE,
-                      'query' => array('token' => $token),
-                    ));
+
+  module_load_include('inc', 'islandora', 'includes/authtokens');
+  $pages = array();
+  foreach ($variables['pages'] as $page_pid) {
+    $token = islandora_get_object_token($page_pid, $dsid, 2);
+
+    // TODO: Slap the widths/heights for pages in here, and make 'em be used in
+    //   on the JS side...  Probably break out this structure generation into a
+    //   separate function?
+    $pages[] = array(
+      'pid' => $page_pid,
+      'uri' => url("islandora/object/{$page_pid}/datastream/{$dsid}/view", array(
+        'absolute' => TRUE,
+        'query' => array(
+          'token' => $token,
+        ),
+      )),
+    );
   }
+
+  global $base_url;
   drupal_add_js(array(
       'islandoraInternetArchiveBookReader' => array(
         'book' => $object->id,
@@ -34,12 +45,11 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
         'textUri' => url('internet_archive_bookreader_text/PID', array('absolute' => TRUE)),
         'dimensionsUri' => url('internet_archive_bookreader_dimensions/PID', array('absolute' => TRUE)),
         'djatokaUri' => variable_get('islandora_internet_archive_bookreader_djatoka_url', 'http://localhost:8080/adore-djatoka'),
-        'resourceUri' => $resource_uri,
-        'imagesFolderUri' => url("$library_path/BookReader/images/", array('absolute' => TRUE, 'external' => TRUE)),
+        'imagesFolderUri' => url("$base_url/$library_path/BookReader/images/", array('absolute' => TRUE, 'external' => TRUE)),
         'compression' => variable_get('islandora_internet_archive_bookreader_compression', '4'),
         'pageProgression' => $variables['page_progression'],
-        'pages' => $variables['pages'],
-        'pageCount' => count($variables['pages']),
+        'pages' => $pages,
+        'pageCount' => count($pages),
       ),
     ), 'setting');
   drupal_add_css("$library_path/BookReader/BookReader.css");
