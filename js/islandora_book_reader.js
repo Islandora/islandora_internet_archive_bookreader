@@ -58,7 +58,9 @@ function IslandoraBookReader(settings) {
    *   The PID the given page repersents.
    */
   IslandoraBookReader.prototype.getPID = function(index) {
-    return this.settings.pages[index];
+    if (typeof this.settings.pages[index] != 'undefined') {
+      return this.settings.pages[index].pid;
+    }
   }
 
   /**
@@ -164,22 +166,6 @@ function IslandoraBookReader(settings) {
   };
 
   /**
-   * Gets the URI to the given objects resource.
-   *
-   * @param string pid
-   *   The id of the object containing the resource.
-   *
-   * @return string
-   *   The Resource URI of the image, to be displayed in the
-   *   viewer.
-   */
-  IslandoraBookReader.prototype.getResourceUri = function(pid) {
-    var uri = this.settings.resourceUri;
-    uri = uri.replace('PID', pid);
-    return uri;
-  };
-
-  /**
    * Gets the URI to the dimensions callback for the given page.
    *
    * @param string pid
@@ -205,9 +191,10 @@ function IslandoraBookReader(settings) {
    *   The URI
    */
   IslandoraBookReader.prototype.getPageURI = function(index, reduce, rotate) {
-    var pid = this.getPID(index);
-    var resource_uri = this.getResourceUri(pid);
-    return this.getDjatokaUri(resource_uri);
+    if (typeof this.settings.pages[index] != 'undefined') {
+      var resource_uri = this.settings.pages[index].uri;
+      return this.getDjatokaUri(resource_uri);
+    }
   }
 
   /**
@@ -274,7 +261,7 @@ function IslandoraBookReader(settings) {
     term = term.replace(/\//g, ' '); // strip slashes, since this goes in the url
     this.searchTerm = term;
     this.removeSearchResults();
-    this.showProgressPopup('<img id="searchmarker" src="'+ this.imagesBaseURL + 'marker_srch-on.png'+'"> Search results will appear below...');
+    this.showProgressPopup('<img id="searchmarker" src="'+ this.imagesBaseURL + 'marker_srch-on.png'+'">' + Drupal.t('Search results will appear below...') + '</img>');
     var that = this;
     $.ajax({url:url, dataType:'json',
             success: function(data, status, xhr) {
@@ -315,10 +302,10 @@ function IslandoraBookReader(settings) {
     this.removeSearchResults();
     this.searchResults = results;
     if (0 == results.matches.length) {
-      var errStr  = 'No matches were found.';
+      var errStr  = Drupal.t('No matches were found.');
       var timeout = 1000;
       if (false === results.indexed) {
-        errStr  = "<p>This book hasn't been indexed for searching yet. We've just started indexing it, so search should be available soon. Please try again later. Thanks!</p>";
+        errStr  = "<p>" + Drupal.t("This book hasn't been indexed for searching yet. We've just started indexing it, so search should be available soon. Please try again later. Thanks!") + "</p>";
         timeout = 5000;
       }
       $(this.popup).html(errStr);
@@ -354,40 +341,41 @@ function IslandoraBookReader(settings) {
     // Navigation handlers will be bound after all UI is in place -- makes moving icons between
     // the toolbar and nav bar easier
     // Setup tooltips -- later we could load these from a file for i18n
-    var titles = { '.logo': 'Go to Archive.org', // $$$ update after getting OL record
-                   '.zoom_in': 'Zoom in',
-                   '.zoom_out': 'Zoom out',
-                   '.onepg': 'One-page view',
-                   '.twopg': 'Two-page view',
-                   '.thumb': 'Thumbnail view',
-                   '.print': 'Print this page',
-                   '.embed': 'Embed BookReader',
-                   '.link': 'Link to this book (and page)',
-                   '.bookmark': 'Bookmark this page',
-                   '.read': 'Read this book aloud',
-                   '.share': 'Share this book',
-                   '.info': 'Info',
-                   '.full': 'Show fullscreen',
-                   '.book_up': 'Page up',
-                   '.book_down': 'Page down',
-                   '.play': 'Play',
-                   '.pause': 'Pause',
-                   '.BOOKREADERdn': 'Show/hide nav bar',
-                   '.BOOKREADERup': 'Show/hide nav bar',
-                   '.book_top': 'First page',
-                   '.book_bottom': 'Last page',
-                   '.full_text' : 'Full Text'
-                 };
+    var titles = {
+      '.logo': Drupal.t('Go to Archive.org'), // $$$ update after getting OL record
+      '.zoom_in': Drupal.t('Zoom in'),
+      '.zoom_out': Drupal.t('Zoom out'),
+      '.onepg': Drupal.t('One-page view'),
+      '.twopg': Drupal.t('Two-page view'),
+      '.thumb': Drupal.t('Thumbnail view'),
+      '.print': Drupal.t('Print this page'),
+      '.embed': Drupal.t('Embed BookReader'),
+      '.link': Drupal.t('Link to this book (and page)'),
+      '.bookmark': Drupal.t('Bookmark this page'),
+      '.read': Drupal.t('Read this book aloud'),
+      '.share': Drupal.t('Share this book'),
+      '.info': Drupal.t('Info'),
+      '.full': Drupal.t('Show fullscreen'),
+      '.book_up': Drupal.t('Page up'),
+      '.book_down': Drupal.t('Page down'),
+      '.play': Drupal.t('Play'),
+      '.pause': Drupal.t('Pause'),
+      '.BOOKREADERdn': Drupal.t('Show/hide nav bar'),
+      '.BOOKREADERup': Drupal.t('Show/hide nav bar'),
+      '.book_top': Drupal.t('First page'),
+      '.book_bottom': Drupal.t('Last page'),
+      '.full_text' : Drupal.t('Full Text')
+    };
     if ('rl' == this.pageProgression) {
-      titles['.book_leftmost'] = 'Last page';
-      titles['.book_rightmost'] = 'First page';
-      titles['.book_left'] = 'Next Page';
-      titles['.book_right'] = 'Previous Page';
+      titles['.book_leftmost'] = Drupal.t('Last page');
+      titles['.book_rightmost'] = Drupal.t('First page');
+      titles['.book_left'] = Drupal.t('Next Page');
+      titles['.book_right'] = Drupal.t('Previous Page');
     } else { // LTR
-      titles['.book_leftmost'] = 'First page';
-      titles['.book_rightmost'] = 'Last page';
-      titles['.book_left'] = 'Previous Page';
-      titles['.book_right'] = 'Next Page';
+      titles['.book_leftmost'] = Drupal.t('First page');
+      titles['.book_rightmost'] = Drupal.t('Last page');
+      titles['.book_left'] = Drupal.t('Previous Page');
+      titles['.book_right'] = Drupal.t('Next Page');
     }
     for (var icon in titles) {
       if (titles.hasOwnProperty(icon)) {
@@ -412,7 +400,9 @@ function IslandoraBookReader(settings) {
     $("#BookReader").append(
       "<div id='BRtoolbar'>"
         +   "<span id='BRtoolbarbuttons'>"
-        +     "<form  id='booksearch'><input type='search' id='textSrch' name='textSrch' val='' placeholder='Search inside'/><button type='submit' id='btnSrch' name='btnSrch'>GO</button></form>"
+        +     "<form  id='booksearch'><input type='search' id='textSrch' name='textSrch' val='' placeholder='"
+        +     Drupal.t('Search inside')
+        +     "'/><button type='submit' id='btnSrch' name='btnSrch'>" + Drupal.t('GO') + "</button></form>"
         +     "<button class='BRicon play'></button>"
         +     "<button class='BRicon pause'></button>"
         +     "<button class='BRicon info'></button>"
@@ -494,8 +484,8 @@ function IslandoraBookReader(settings) {
   IslandoraBookReader.prototype.blankInfoDiv = function() {
     return $([
       '<div class="BRfloat" id="BRinfo">',
-            '<div class="BRfloatHead">About this book',
-                '<a class="floatShut" href="javascript:;" onclick="jQuery.fn.colorbox.close();"><span class="shift">Close</span></a>',
+            '<div class="BRfloatHead">' + Drupal.t('About this book'),
+                '<a class="floatShut" href="javascript:;" onclick="jQuery.fn.colorbox.close();"><span class="shift">' + Drupal.t('Close') + '</span></a>',
             '</div>',
       '</div>'].join('\n'));
   }
@@ -507,7 +497,7 @@ function IslandoraBookReader(settings) {
      return $([
         '<div class="BRfloat" id="BRfulltext">',
             '<div class="BRfloatHead">Text View',
-                '<a class="floatShut" href="javascript:;" onclick="jQuery.fn.colorbox.close();"><span class="shift">Close</span></a>',
+                '<a class="floatShut" href="javascript:;" onclick="jQuery.fn.colorbox.close();"><span class="shift">' + Drupal.t('Close') + '</span></a>',
             '</div>',
             '<div class="BRfloatMeta">',
             '</div>',
@@ -524,7 +514,7 @@ function IslandoraBookReader(settings) {
       '<div class="BRfloat" id="BRshare">',
             '<div class="BRfloatHead">',
                 'Share',
-                '<a class="floatShut" href="javascript:;" onclick="jQuery.fn.colorbox.close();"><span class="shift">Close</span></a>',
+                '<a class="floatShut" href="javascript:;" onclick="jQuery.fn.colorbox.close();"><span class="shift">' + Drupal.t('Close') + '</span></a>',
             '</div>',
       '</div>'].join('\n'));
   }
@@ -544,18 +534,18 @@ function IslandoraBookReader(settings) {
     var bookView = (pageView + '').replace(/#.*/,'');
     var self = this;
     var jForm = $([
-        '<p>Copy and paste one of these options to share this book elsewhere.</p>',
+        '<p>' + Drupal.t('Copy and paste one of these options to share this book elsewhere.') + '</p>',
         '<form method="post" action="">',
             '<fieldset>',
-                '<label for="pageview">Link to this page view:</label>',
+                '<label for="pageview">' + Drupal.t('Link to this page view:') + '</label>',
                 '<input type="text" name="pageview" id="pageview" value="' + pageView + '"/>',
             '</fieldset>',
             '<fieldset>',
-                '<label for="booklink">Link to the book:</label>',
+                '<label for="booklink">' + Drupal.t('Link to the book:') + '</label>',
                 '<input type="text" name="booklink" id="booklink" value="' + bookView + '"/>',
             '</fieldset>',
             '<fieldset class="center">',
-                '<button type="button" onclick="jQuery.fn.colorbox.close();">Finished</button>',
+                '<button type="button" onclick="jQuery.fn.colorbox.close();">' + Drupal.t('Finished') + '</button>',
             '</fieldset>',
         '</form>'].join('\n'));
 
@@ -596,7 +586,7 @@ function IslandoraBookReader(settings) {
               jFullTextDiv.find('.BRfloatMeta').html(data);
             });
     } else if (3 == this.mode) {
-      jFullTextDiv.find('.BRfloatMeta').html('<div>Full text not supported for this view.</div>');
+      jFullTextDiv.find('.BRfloatMeta').html('<div>' + Drupal.t('Full text not supported for this view.') + '</div>');
     } else {
       var twoPageText = $([
       '<div class="textTop">',

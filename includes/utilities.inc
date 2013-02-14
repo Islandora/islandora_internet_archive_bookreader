@@ -79,16 +79,24 @@ function islandora_internet_archive_bookreader_get_technical_metadata(FedoraObje
  *   If the request to Djatoka fails then FALSE is returned.
  */
 function islandora_internet_archive_bookreader_get_page_metadata_from_djatoka($object_id) {
-  $datastream_url = url("islandora/object/{$object_id}/datastream/JP2/view", array('absolute' => TRUE));
-  $djatoka_params = array(
-    'url_ver=Z39.88-2004',
-    "rft_id={$datastream_url}",
-    'svc_id=info:lanl-repo/svc/getMetadata',
-  );
-  $djatoka_params = implode('&', $djatoka_params);
+  module_load_include('inc', 'islandora', 'includes/authtokens');
+  $datastream_url = url("islandora/object/{$object_id}/datastream/JP2/view", array(
+    'absolute' => TRUE,
+    'query' => array(
+      'token' => islandora_get_object_token($object_id, 'JP2'),
+    ),
+  ));
+
   $djatoka_url = variable_get('islandora_internet_archive_bookreader_djatoka_url', 'http://localhost:8080/adore-djatoka');
-  $djatoka_url .= ($djatoka_url[strlen($djatoka_url) - 1] == '/') ? '' : '/';
-  $djatoka_url .= "resolver?{$djatoka_params}";
+  $djatoka_url .= (substr($djatoka_url, -1) == '/') ? '' : '/';
+  $djatoka_url = url($djatoka_url . "resolver", array(
+    'query' => array(
+      'url_ver' => 'Z39.88-2004',
+      'rft_id' => $datastream_url,
+      'svc_id' => 'info:lanl-repo/svc/getMetadata',
+    ),
+    'external' => TRUE,
+  ));
   $request = drupal_http_request($djatoka_url);
   if ($request->code == '200') {
     return drupal_json_decode($request->data);
