@@ -145,6 +145,12 @@ function IslandoraBookReader(settings) {
    */
   IslandoraBookReader.prototype.getDjatokaUri = function(resource_uri) {
     var base_uri = this.settings.djatokaUri;
+    //Do some sanitation on that base uri.
+    //Since it comes from an admin form, let's make sure there's a '/' at the
+    //end of it.
+    if (base_uri.charAt(base_uri.length) != '/') {
+      base_uri += '/';
+    }
     var params = $.param({
       'rft_id': resource_uri,
       'url_ver': 'Z39.88-2004',
