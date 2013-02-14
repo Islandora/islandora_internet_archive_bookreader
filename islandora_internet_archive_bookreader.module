@@ -52,7 +52,7 @@ function islandora_internet_archive_bookreader_menu() {
 function islandora_internet_archive_bookreader_theme() {
   return array(
     'islandora_internet_archive_bookreader' => array(
-      'file' => 'theme/islandora_internet_archive_bookreader.theme.inc',
+      'file' => 'theme/theme.inc',
       'template' => 'theme/islandora-internet-archive-bookreader',
       'variables' => array(
         'object' => NULL,

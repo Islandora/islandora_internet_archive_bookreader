@@ -18,7 +18,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   $resource_uri = url("islandora/object/PID/datastream/{$dsid}/view", array('absolute' => TRUE));
   // Get token to allow access to XACML protected datastreams if necessary.
   if (isset($object['POLICY'])) {
-    module_load_include('inc', 'islandora', 'includes/islandora_authtokens');
+    module_load_include('inc', 'islandora', 'includes/authtokens');
     $token = islandora_get_object_token($object->id, $dsid, 2);
     $resource_uri = url("islandora/object/PID/datastream/{$dsid}/view", array(
                       'absolute' => TRUE,
