@@ -18,14 +18,13 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
 
   module_load_include('inc', 'islandora', 'includes/authtokens');
   $pages = array();
-  foreach ($variables['pages'] as $page_pid) {
+  foreach ($variables['pages'] as $page_pid => $info) {
     $token = islandora_get_object_token($page_pid, $dsid, 2);
 
     // TODO: Slap the widths/heights for pages in here, and make 'em be used in
     //   on the JS side...  Probably break out this structure generation into a
     //   separate function?
-    $pages[] = array(
-      'pid' => $page_pid,
+    $pages[] = $info + array(
       'uri' => url("islandora/object/{$page_pid}/datastream/{$dsid}/view", array(
         'absolute' => TRUE,
         'query' => array(

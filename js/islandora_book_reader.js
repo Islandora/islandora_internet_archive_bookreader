@@ -49,6 +49,15 @@ function IslandoraBookReader(settings) {
   }
 
   /**
+   * Get the structure for the given page.
+   */
+  IslandoraBookReader.prototype.getPage = function(index) {
+    if (typeof this.settings.pages[index] != 'undefined') {
+      return this.settings.pages[index];
+    }
+  }
+
+  /**
    * For a given "accessible page index" return the PID of that page.
    *
    * @param int index
@@ -58,8 +67,8 @@ function IslandoraBookReader(settings) {
    *   The PID the given page repersents.
    */
   IslandoraBookReader.prototype.getPID = function(index) {
-    if (typeof this.settings.pages[index] != 'undefined') {
-      return this.settings.pages[index].pid;
+    if (typeof this.getPage(index) != 'undefined') {
+      return this.getPage(index).pid;
     }
   }
 
@@ -77,20 +86,30 @@ function IslandoraBookReader(settings) {
    */
   IslandoraBookReader.prototype.getPageDimensions = function(index) {
     var dimensions = { width: 0, height: 0 };
-    var pid = this.getPID(index);
-    if(typeof pid == 'undefined') {
-      return dimensions;
+    var page = this.getPage(index);
+
+    // If we don't have one or the other, make a query out to Djatoka.
+    if (typeof page.width == 'undefined' || typeof page.height == 'undefined') {
+      var pid = page.pid;
+      if(typeof pid == 'undefined') {
+        return dimensions;
+      }
+      var url = this.getDimensionsUri(pid);
+      jQuery.ajax({
+        url: url,
+        dataType: 'json',
+        success: function(data, textStatus, jqXHR) {
+          dimensions.width = parseInt(data.width);
+          dimensions.height = parseInt(data.height);
+        },
+        async: false,
+      });
     }
-    var url = this.getDimensionsUri(pid);
-    jQuery.ajax({
-      url: url,
-      dataType: 'json',
-      success: function(data, textStatus, jqXHR) {
-        dimensions.width = parseInt(data.width);
-        dimensions.height = parseInt(data.height);
-      },
-      async: false,
-    });
+    else {
+      dimensions.width = parseInt(page.width);
+      dimensions.height = parseInt(page.height);
+    }
+
     return dimensions;
   }
 
