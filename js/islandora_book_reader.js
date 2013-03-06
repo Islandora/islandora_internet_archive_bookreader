@@ -67,8 +67,9 @@ function IslandoraBookReader(settings) {
    *   The PID the given page repersents.
    */
   IslandoraBookReader.prototype.getPID = function(index) {
-    if (typeof this.getPage(index) != 'undefined') {
-      return this.getPage(index).pid;
+    var page = this.getPage(index);
+    if (typeof page != 'undefined') {
+      return page.pid;
     }
   }
 
@@ -88,26 +89,28 @@ function IslandoraBookReader(settings) {
     var dimensions = { width: 0, height: 0 };
     var page = this.getPage(index);
 
-    // If we don't have one or the other, make a query out to Djatoka.
-    if (typeof page.width == 'undefined' || typeof page.height == 'undefined') {
-      var pid = page.pid;
-      if(typeof pid == 'undefined') {
-        return dimensions;
+    if (typeof page != 'undefined') {
+      // If we don't have one or the other, make a query out to Djatoka.
+      if (typeof page.width == 'undefined' || typeof page.height == 'undefined') {
+        var pid = page.pid;
+        if (typeof pid == 'undefined') {
+          return dimensions;
+        }
+        var url = this.getDimensionsUri(pid);
+        jQuery.ajax({
+          url: url,
+          dataType: 'json',
+          success: function(data, textStatus, jqXHR) {
+            dimensions.width = parseInt(data.width);
+            dimensions.height = parseInt(data.height);
+          },
+          async: false,
+        });
       }
-      var url = this.getDimensionsUri(pid);
-      jQuery.ajax({
-        url: url,
-        dataType: 'json',
-        success: function(data, textStatus, jqXHR) {
-          dimensions.width = parseInt(data.width);
-          dimensions.height = parseInt(data.height);
-        },
-        async: false,
-      });
-    }
-    else {
-      dimensions.width = parseInt(page.width);
-      dimensions.height = parseInt(page.height);
+      else {
+        dimensions.width = parseInt(page.width);
+        dimensions.height = parseInt(page.height);
+      }
     }
 
     return dimensions;
