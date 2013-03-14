@@ -57,7 +57,7 @@ function islandora_internet_archive_bookreader_theme() {
       'variables' => array(
         'object' => NULL,
         'datastream_id' => 'JP2',
-        'page_progression' => 'lr',
+        'page_progression' => 'rl',
         'pages' => array(),
       ),
     ),
