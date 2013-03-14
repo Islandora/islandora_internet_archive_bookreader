@@ -2,6 +2,6 @@ name = "Islandora Internet Archive BookReader"
 description = "Implements the Internet Archive BookReader for use with Islandora."
 package = Islandora
 dependencies[] = libraries
-dependencies[] = islandora
+dependencies[] = islandora_paged_content
 version = 7.x-dev
 core = 7.x

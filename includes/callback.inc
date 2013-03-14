@@ -20,8 +20,8 @@
  *   The page object to fetch the metadata from.
  */
 function islandora_internet_archive_bookreader_dimensions_callback(FedoraObject $object) {
-  module_load_include('inc', 'islandora_internet_archive_bookreader', 'includes/utilities');
-  $dimensions = islandora_internet_archive_bookreader_get_page_dimensions($object);
+  module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
+  $dimensions = islandora_paged_content_get_page_dimensions($object);
   drupal_json_output($dimensions);
   drupal_exit();
 }
@@ -51,12 +51,22 @@ function islandora_internet_archive_bookreader_text_callback(FedoraObject $objec
  *   The text to search for within the OCR'ed text.
  */
 function islandora_internet_archive_bookreader_search_callback($object_id, $term) {
+  module_load_include('inc', 'islandora_paged_content', 'includes/highlighting');
   module_load_include('inc', 'islandora_internet_archive_bookreader', 'includes/utilities');
   if (!module_exists('islandora_solr')) {
     drupal_exit();
   }
-  $results = islandora_internet_archive_bookreader_query_solr($object_id, $term);
-  $results = islandora_internet_archive_bookreader_map_solr_results_to_bookreader_results($results, $term);
+
+  $results = islandora_paged_content_perform_solr_highlighting_query($term, array(
+    'fq' => array(format_string('!field:("info:fedora/!value" OR "!value")', array(
+      '!field' => variable_get('islandora_internet_archive_bookreader_ocr_filter_field', 'RELS_EXT_isMemberOf_uri_ms'),
+      '!value' => $object_id,
+    ))),
+    'hl.tag.pre' => '{{{',
+    'hl.tag.post' => '}}}',
+    'defType' => 'dismax',
+  ));
+  $results = islandora_internet_archive_bookreader_remap_highlighting_for_bookreader_results($results);
   drupal_json_output($results);
   drupal_exit();
 }
