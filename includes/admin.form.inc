@@ -36,6 +36,13 @@ function islandora_internet_archive_bookreader_admin_settings_form(array $form, 
       '#description' => t('When we search within a book we need to know the pid of the book. This would be the solr field that contains the book pid for each page object.'),
       '#default_value' => $get_default_value('islandora_internet_archive_bookreader_ocr_filter_field', 'rels.isMemberOf'),
     ),
+    'islandora_internet_archive_bookreader_overlay_opacity' => array(
+      '#type' => 'textfield',
+      '#title' => t('Overlay Opacity'),
+      '#description' => t('The opacity of the overlay, when opening the info, fulltext and share dialogs (A number between 0 (fully transparent) and 1 (fully opaque)).'),
+      '#element_validate' => array('element_validate_number'),
+      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_overlay_opacity', '0.5')
+    ),
   );
   return system_settings_form($form);
 }

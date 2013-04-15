@@ -16,6 +16,7 @@ function islandora_internet_archive_bookreader_uninstall() {
     'islandora_internet_archive_bookreader_ocr_filter_field',
     'islandora_internet_archive_bookreader_solr_result_count',
     'islandora_internet_archive_bookreader_sequence_number',
+    'islandora_internet_archive_bookreader_overlay_opacity',
   );
   // Delete the Drupal variables defined by this module.
   array_walk($variables, 'variable_del');
