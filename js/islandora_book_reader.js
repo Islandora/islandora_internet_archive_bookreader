@@ -489,15 +489,21 @@ function IslandoraBookReader(settings) {
     var self = this;
     jToolbar.find('.share').colorbox({inline: true, opacity: overlayOpacity, href: "#BRshare", onLoad: function() {
       self.autoStop(); self.ttsStop();
-      $('#colorbox').draggable();
+      $('#colorbox').draggable({
+        cancel: '.BRfloat > :not(.BRfloatHead)'
+      });
     }});
     jToolbar.find('.info').colorbox({inline: true, opacity: overlayOpacity, href: "#BRinfo", onLoad: function() {
       self.autoStop(); self.ttsStop();
-      $('#colorbox').draggable();
+      $('#colorbox').draggable({
+        cancel: '.BRfloat > :not(.BRfloatHead)'
+      });
     }});
     jToolbar.find('.full_text').colorbox({inline: true, opacity: overlayOpacity, href: "#BRfulltext", onLoad: function() {
       self.autoStop(); self.ttsStop();
-      $('#colorbox').draggable();
+      $('#colorbox').draggable({
+        cancel: '.BRfloat > :not(.BRfloatHead)'
+      });
       self.buildFullTextDiv($('#BRfulltext'));
     }});
     $('<div style="display: none;"></div>').append(this.blankShareDiv()).append(this.blankInfoDiv()).append(this.blankFullTextDiv()).appendTo($('body'));
