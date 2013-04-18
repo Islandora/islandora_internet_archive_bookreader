@@ -15,6 +15,7 @@ function IslandoraBookReader(settings) {
   this.bookUrl = document.location.toString();
   this.imagesBaseURL = settings.imagesFolderUri;
   this.logoURL = '';
+  this.mode = settings.mode
 }
 
 (function ($) {

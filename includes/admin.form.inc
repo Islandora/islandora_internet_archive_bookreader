@@ -43,6 +43,17 @@ function islandora_internet_archive_bookreader_admin_settings_form(array $form, 
       '#element_validate' => array('element_validate_number'),
       '#default_value' => $get_default_value('islandora_internet_archive_bookreader_overlay_opacity', '0.5')
     ),
+    'islandora_internet_archive_bookreader_default_page_view' => array(
+      '#type' => 'select',
+      '#title' => t('Default page view'),
+      '#description' => t('The number of pages to display by default'),
+      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_default_page_view', 1),
+      '#options' => array(
+        1 => 'Single page',
+        2 => 'Side by side',
+        3 => 'Thumbnails',
+      ),
+    ),
   );
   return system_settings_form($form);
 }
