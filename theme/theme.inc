@@ -35,7 +35,6 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   }
 
   global $base_url;
-  $mode = (int) variable_get('islandora_internet_archive_bookreader_default_page_view', 1);
   drupal_add_js(array(
       'islandoraInternetArchiveBookReader' => array(
         'book' => $object->id,
@@ -47,11 +46,11 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
         'djatokaUri' => variable_get('islandora_paged_content_djatoka_url', 'http://localhost:8080/adore-djatoka'),
         'imagesFolderUri' => url("$base_url/$library_path/BookReader/images/", array('absolute' => TRUE, 'external' => TRUE)),
         'compression' => variable_get('islandora_internet_archive_bookreader_compression', '4'),
-        'pageProgression' => ($mode == 2 ? 'lr' : $variables['page_progression']),
+        'pageProgression' => $variables['page_progression'],
         'pages' => $pages,
         'pageCount' => count($pages),
         'overlayOpacity' => variable_get('islandora_internet_archive_bookreader_overlay_opacity', '0.5'),
-        'mode' => $mode,
+        'mode' => (int) variable_get('islandora_internet_archive_bookreader_default_page_view', 1),
       ),
     ), 'setting');
   drupal_add_css("$library_path/BookReader/BookReader.css", array(
