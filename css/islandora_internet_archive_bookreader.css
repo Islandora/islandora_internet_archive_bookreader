@@ -40,7 +40,7 @@ div#BRnav {
   margin-top: -40px;
 }
 div#BRfulltext .BRfloatMeta {
-  overflow: scroll;
+  overflow: auto;
 }
 div.BRpagediv1up {
  overflow: visible;
@@ -92,4 +92,23 @@ div.BRprogresspopup {
 .textLeft {
   float: left;
   width: 50%;
+}
+
+/*
+ * Colorbox (used for displaying textarea with page OCR)
+ * 
+ * Used to handle conflict with the colorbox Drupal module
+ * pertaining to the textarea
+ */
+
+#cboxWrapper {
+  background: none; /* Used to eliminate white background */
+}
+
+#cboxMiddleLeft {
+  height: 0 !important; /* Positions textarea correctly */
+}
+
+#cboxContent {
+  height: 643px !important; /* Set height of textarea to display correctly */
 }
