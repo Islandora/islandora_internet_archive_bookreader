@@ -41,7 +41,7 @@ function islandora_internet_archive_bookreader_admin_settings_form(array $form, 
       '#title' => t('Overlay Opacity'),
       '#description' => t('The opacity of the overlay, when opening the info, fulltext and share dialogs (A number between 0 (fully transparent) and 1 (fully opaque)).'),
       '#element_validate' => array('element_validate_number'),
-      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_overlay_opacity', '0.5')
+      '#default_value' => $get_default_value('islandora_internet_archive_bookreader_overlay_opacity', '0.5'),
     ),
     'islandora_internet_archive_bookreader_default_page_view' => array(
       '#type' => 'select',

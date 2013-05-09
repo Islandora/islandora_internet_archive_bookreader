@@ -46,4 +46,3 @@ function islandora_internet_archive_bookreader_remap_highlighting_for_bookreader
 
   return $results;
 }
-

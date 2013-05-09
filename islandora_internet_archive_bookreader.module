@@ -95,4 +95,3 @@ function islandora_internet_archive_bookreader_islandora_viewer_info() {
 function islandora_internet_archive_bookreader_viewer_callback(array $params) {
   return theme('islandora_internet_archive_bookreader', $params);
 }
-

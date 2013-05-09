@@ -22,8 +22,8 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
     $token = islandora_get_object_token($page_pid, $dsid, 2);
 
     // TODO: Slap the widths/heights for pages in here, and make 'em be used in
-    //   on the JS side...  Probably break out this structure generation into a
-    //   separate function?
+    // on the JS side...  Probably break out this structure generation into a
+    // separate function?
     $pages[] = $info + array(
       'uri' => url("islandora/object/{$page_pid}/datastream/{$dsid}/view", array(
         'absolute' => TRUE,
@@ -114,14 +114,8 @@ function theme_islandora_internet_archive_bookreader_book_info(array $variables)
  *   The object to fetch the information from.
  *
  * @return array
- *   Any array of fields where the key is the label and the second the
+ *   Any associative array where the key is the label and the second the
  *   fields value(s).
- *
- * @code
- *   array(
- *     'label' => array('value', 'value')
- *   )
- * @endcode
  */
 function islandora_internet_archive_bookreader_info_fields(FedoraObject $object) {
   if (!isset($object['MODS'])) {
