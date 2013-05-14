@@ -23,8 +23,6 @@ function islandora_internet_archive_bookreader_remap_highlighting_for_bookreader
         'par' => array(
           array(
             'page' => intval($info['page']['sequence_number']),
-            'page_width' => $info['page']['width'],
-            'page_height' => $info['page']['height'],
             'boxes' => array(),
           ),
         ),
