@@ -16,10 +16,10 @@
  * Prints a JSON object repersenting the metadata.
  * This function exits.
  *
- * @param FedoraObject $object
+ * @param AbstractObject $object
  *   The page object to fetch the metadata from.
  */
-function islandora_internet_archive_bookreader_dimensions_callback(FedoraObject $object) {
+function islandora_internet_archive_bookreader_dimensions_callback(AbstractObject $object) {
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   $dimensions = islandora_paged_content_get_page_dimensions($object);
   drupal_json_output($dimensions);
@@ -31,10 +31,10 @@ function islandora_internet_archive_bookreader_dimensions_callback(FedoraObject 
  *
  * This function exits.
  *
- * @param FedoraObject $object
+ * @param AbstractObject $object
  *   The page object whose OCR data-stream will be used for display.
  */
-function islandora_internet_archive_bookreader_text_callback(FedoraObject $object) {
+function islandora_internet_archive_bookreader_text_callback(AbstractObject $object) {
   echo isset($object['OCR']) ? htmlspecialchars($object['OCR']->content) : '';
   drupal_exit();
 }

@@ -110,14 +110,14 @@ function theme_islandora_internet_archive_bookreader_book_info(array $variables)
 /**
  * Retrieves fields to display in the BookReader's "info" modal dialog box.
  *
- * @param FedoraObject $object
+ * @param AbstractObject $object
  *   The object to fetch the information from.
  *
  * @return array
  *   Any associative array where the key is the label and the second the
  *   fields value(s).
  */
-function islandora_internet_archive_bookreader_info_fields(FedoraObject $object) {
+function islandora_internet_archive_bookreader_info_fields(AbstractObject $object) {
   if (!isset($object['MODS'])) {
     return array();
   }
