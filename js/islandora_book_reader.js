@@ -284,7 +284,7 @@ function IslandoraBookReader(settings) {
     term = term.replace(/\//g, ' '); // strip slashes, since this goes in the url
     this.searchTerm = term;
     this.removeSearchResults();
-    this.showProgressPopup('<img id="searchmarker" src="'+ this.imagesBaseURL + 'marker_srch-on.png'+'">' + Drupal.t('Search results will appear below...') + '</img>');
+    this.showProgressPopup('<img id="searchmarker" src="'+ this.imagesBaseURL + 'marker_srch-on.png'+'">' + Drupal.t('Search results will appear below ...') + '</img>');
     var that = this;
     $.ajax({url:url, dataType:'json',
             success: function(data, status, xhr) {
