@@ -33,7 +33,7 @@ function islandora_internet_archive_bookreader_admin_settings_form(array $form, 
       '#access' => $solr_enabled,
       '#type' => 'textfield',
       '#title' => t('Solr field relating pages to book PIDs'),
-      '#description' => t('BookReader needs to know the PID of any book it\'s searching in, because OCR datastreams are stored in individual pages and </br>not in the book as a whole. This should therefore be set to the page-object-based Solr field that relates it to its parent book\'s PID.'),
+      '#description' => t("BookReader needs to know the PID of any book it's searching in, because OCR datastreams are stored in individual pages and </br>not in the book as a whole. This should therefore be set to the page-object-based Solr field that relates it to its parent book's PID."),
       '#default_value' => $get_default_value('islandora_internet_archive_bookreader_ocr_filter_field', 'rels.isMemberOf'),
     ),
     'islandora_internet_archive_bookreader_overlay_opacity' => array(
