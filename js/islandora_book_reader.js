@@ -33,6 +33,7 @@ function IslandoraBookReader(settings) {
    *   The index of the page.
    */
   IslandoraBookReader.prototype.getPageNum = function(index) {
+    
     return index + 1;
   }
 
@@ -46,7 +47,7 @@ function IslandoraBookReader(settings) {
    *   The index of the given leaf number.
    */
   IslandoraBookReader.prototype.leafNumToIndex = function(leafNum) {
-    return leafNum-1;
+    return leafNum - 1;
   }
 
   /**
@@ -89,7 +90,6 @@ function IslandoraBookReader(settings) {
   IslandoraBookReader.prototype.getPageDimensions = function(index) {
     var dimensions = { width: 0, height: 0 };
     var page = this.getPage(index);
-
     if (typeof page != 'undefined') {
       // If we don't have one or the other, make a query out to Djatoka.
       if (typeof page.width == 'undefined' || typeof page.height == 'undefined') {
@@ -419,7 +419,7 @@ function IslandoraBookReader(settings) {
     if (!navigator.userAgent.match(/mobile/i)) {
       readIcon = "<button class='BRicon read modal'></button>";
     }
-
+    
     $("#BookReader").append(
       "<div id='BRtoolbar'>"
         +   "<span id='BRtoolbarbuttons'>"
@@ -447,7 +447,6 @@ function IslandoraBookReader(settings) {
       that.search($('#textSrch').val());
       return false;
     });
-
     // Browser hack - bug with colorbox on iOS 3 see https://bugs.launchpad.net/bookreader/+bug/686220
     if ( navigator.userAgent.match(/ipad/i) && $.browser.webkit && (parseInt($.browser.version, 10) <= 531) ) {
       $('#BRtoolbarbuttons .info').hide();
@@ -511,6 +510,8 @@ function IslandoraBookReader(settings) {
     $('#BRinfo .BRfloatTitle a').attr( {'href': this.bookUrl} ).text(this.bookTitle).addClass('title');
     this.buildInfoDiv($('#BRinfo'));
     this.buildShareDiv($('#BRshare'));
+    
+    
   }
 
   /**
@@ -614,8 +615,10 @@ function IslandoraBookReader(settings) {
     jFullTextDiv.find('.BRfloatMeta').height(600);
     jFullTextDiv.find('.BRfloatMeta').width(600);
     if (1 == this.mode) {
-      var index = this.currentIndex();
-      var pid = this.getPID(index);
+      // Recent fix to correct issue with 2 page books
+      var hash_arr = this.oldLocationHash.split("/");
+      var index = hash_arr[1];
+      var pid = this.getPID(index-1);
       $.get(this.getTextURI(pid),
             function(data) {
               jFullTextDiv.find('.BRfloatMeta').html(data);
@@ -670,7 +673,21 @@ function IslandoraBookReader(settings) {
    * browsers can't handle that shit.
    */
   IslandoraBookReader.prototype.updateLocationHash = function() {
+    // Updated with fix to recent bug found in the Archive Viewer that
+    // prevents the last page from displaying the correct transcriptions
+    // or hash links.
+    var page_string = $('#pagenum').children('.currentpage').html();
+    var p_arr = page_string.split(" ");
+    var p_index = p_arr[1]
+    index = p_index;
+    
     var newHash = '#' + this.fragmentFromParams(this.paramsFromCurrent());
+    if (page_string != this.currentIndex()) {
+      var param_data = this.fragmentFromParams(this.paramsFromCurrent()).split("/");
+      param_data[1] = index;
+      newHash = '#' + replaceAll(',','/',param_data.toString());
+    }
+    // End bug fix.
     if (this.oldLocationHash != newHash) {
       window.location.hash = newHash;
     }
@@ -679,6 +696,10 @@ function IslandoraBookReader(settings) {
     this.oldLocationHash = newHash;
   }
 
+  function replaceAll(find, replace, str) {
+    return str.replace(new RegExp(find, 'g'), replace);
+  }
+  
   /**
    * Prepare to flip the current right page left.
    *
