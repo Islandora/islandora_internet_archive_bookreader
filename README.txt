@@ -33,7 +33,7 @@ Developer documentation:
 http://openlibrary.org/dev/docs/bookreader
 
 Hosted source code:
-http://github.com/openlibrary/bookreader
+https://github.com/Islandora/internet_archive_bookreader.git
 
 CONFIGURATION
 -------------
