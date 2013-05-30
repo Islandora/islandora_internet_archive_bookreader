@@ -16,6 +16,7 @@ function IslandoraBookReader(settings) {
   this.imagesBaseURL = settings.imagesFolderUri;
   this.logoURL = '';
   this.mode = settings.mode
+  this.fullscreen = false;
 }
 
 (function ($) {
@@ -33,7 +34,7 @@ function IslandoraBookReader(settings) {
    *   The index of the page.
    */
   IslandoraBookReader.prototype.getPageNum = function(index) {
-    
+
     return index + 1;
   }
 
@@ -419,7 +420,7 @@ function IslandoraBookReader(settings) {
     if (!navigator.userAgent.match(/mobile/i)) {
       readIcon = "<button class='BRicon read modal'></button>";
     }
-    
+
     $("#BookReader").append(
       "<div id='BRtoolbar'>"
         +   "<span id='BRtoolbarbuttons'>"
@@ -430,8 +431,7 @@ function IslandoraBookReader(settings) {
         +     "<button class='BRicon pause'></button>"
         +     "<button class='BRicon info'></button>"
         +     "<button class='BRicon full_text'></buttion>"
-        // @todo Fix full screen mode.
-        //+     "<button class='BRicon full'></button>"
+        +     "<button class='BRicon full'></button>"
         +     "<button class='BRicon share'></button>"
         +     readIcon
         +   "</span>"
@@ -506,12 +506,50 @@ function IslandoraBookReader(settings) {
       });
       self.buildFullTextDiv($('#BRfulltext'));
     }});
+
+    jToolbar.find('.full').bind('click', function() {
+        self.toggleFullScreen();
+    });
+
     $('<div style="display: none;"></div>').append(this.blankShareDiv()).append(this.blankInfoDiv()).append(this.blankFullTextDiv()).appendTo($('body'));
     $('#BRinfo .BRfloatTitle a').attr( {'href': this.bookUrl} ).text(this.bookTitle).addClass('title');
     this.buildInfoDiv($('#BRinfo'));
     this.buildShareDiv($('#BRshare'));
-    
-    
+  }
+
+  /**
+   * Toggle fullscreen viewer.
+   */
+  IslandoraBookReader.prototype.toggleFullScreen = function() {
+    this.fullscreen = (this.fullscreen ? false : true);
+    if(this.fullscreen) {
+      $('div#book-viewer').css({
+        'position': 'fixed',
+        'width': '100%',
+        'height': '100%',
+        'left': '0',
+        'top': '0',
+        'z-index': '700'
+      });
+      $('div#BookReader, div#BRcontainer').css({
+        'height': '100%'
+      });
+      //this little hack re-centers the pages
+      this.zoom(1);
+      this.zoom(2);
+
+    }
+    else {
+      $('div#book-viewer').css({
+      'position': 'relative',
+      'z-index': '0'
+      });
+      $('div#BookReader, div#BRcontainer').css({
+        'height': '680px'
+      });
+      this.zoom(1);
+      this.zoom(2);
+    }
   }
 
   /**
@@ -680,7 +718,7 @@ function IslandoraBookReader(settings) {
     var p_arr = page_string.split(" ");
     var p_index = p_arr[1]
     index = p_index;
-    
+
     var newHash = '#' + this.fragmentFromParams(this.paramsFromCurrent());
     if (page_string != this.currentIndex()) {
       var param_data = this.fragmentFromParams(this.paramsFromCurrent()).split("/");
@@ -699,7 +737,7 @@ function IslandoraBookReader(settings) {
   function replaceAll(find, replace, str) {
     return str.replace(new RegExp(find, 'g'), replace);
   }
-  
+
   /**
    * Prepare to flip the current right page left.
    *
