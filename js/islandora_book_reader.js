@@ -508,7 +508,7 @@ function IslandoraBookReader(settings) {
     }});
 
     jToolbar.find('.full').bind('click', function() {
-        self.toggleFullScreen();
+      self.toggleFullScreen();
     });
 
     $('<div style="display: none;"></div>').append(this.blankShareDiv()).append(this.blankInfoDiv()).append(this.blankFullTextDiv()).appendTo($('body'));
@@ -715,9 +715,14 @@ function IslandoraBookReader(settings) {
     // prevents the last page from displaying the correct transcriptions
     // or hash links.
     var page_string = $('#pagenum').children('.currentpage').html();
-    var p_arr = page_string.split(" ");
-    var p_index = p_arr[1]
-    index = p_index;
+    if (page_string != null) {
+      var p_arr = page_string.split(" ");
+      var p_index = p_arr[1]
+      index = p_index;
+    }
+    else {
+      index = 1;
+    }
 
     var newHash = '#' + this.fragmentFromParams(this.paramsFromCurrent());
     if (page_string != this.currentIndex()) {
