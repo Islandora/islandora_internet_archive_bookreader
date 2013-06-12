@@ -97,7 +97,7 @@ function theme_islandora_internet_archive_bookreader_book_info(array $variables)
   };
   $fields = array_map($convert_to_string, $fields);
   $rows = array_map(NULL, array_keys($fields), array_values($fields));
-  $content = theme_table(array(
+  $content = theme('table', array(
                'caption' => '',
                'empty' => t('No Information specified.'),
                'attributes' => array(),
@@ -119,7 +119,7 @@ function theme_islandora_internet_archive_bookreader_book_info(array $variables)
  *   fields value(s).
  */
 function islandora_internet_archive_bookreader_info_fields(AbstractObject $object) {
-  if (!isset($object['MODS'])) {
+  if (!(isset($object['MODS']) && islandora_datastream_access(FEDORA_VIEW_OBJECTS, $object['MODS']))) {
     return array();
   }
   $fields = array(
