@@ -1,3 +1,13 @@
+BUILD STATUS
+------------
+Current build status:
+[![Build Status](https://travis-ci.org/Islandora/islandora_internet_archive_bookreader.png?branch=7.x)](https://travis-ci.org/Islandora/islandora_internet_archive_bookreader)
+
+CI Server:
+http://jenkins.discoverygarden.ca
+
+ISLANDORA INTERNET ARCHIVE BOOKREADER
+==================
 
 CONTENTS OF THIS FILE
 ---------------------
