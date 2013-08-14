@@ -36,7 +36,7 @@ function islandora_internet_archive_bookreader_dimensions_callback(AbstractObjec
  */
 function islandora_internet_archive_bookreader_text_callback(AbstractObject $object) {
   $ocr_exists = isset($object['OCR']);
-  $accessible_ocr = isset($object['OCR']) && islandora_datastream_access(FEDORA_VIEW_OBJECTS, $object['OCR']);
+  $accessible_ocr = isset($object['OCR']) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object['OCR']);
   echo $ocr_exists ? (
     $accessible_ocr ?
       htmlspecialchars($object['OCR']->content) :
