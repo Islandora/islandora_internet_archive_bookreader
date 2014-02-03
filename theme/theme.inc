@@ -141,7 +141,7 @@ function islandora_internet_archive_bookreader_info_fields(AbstractObject $objec
     'Abstract' => '//mods:abstract',
     'Identifier' => '//mods:identifier',
     'Physical Description' => array('//mods:physicalDescription', 'mods:extent | mods:form | mods:note[not(@*)] | mods:note[@type="physical"] | mods:note[@type="details"] | mods:scale | mods:coordinates'),
-    'Topic' => '/mods:mods/mods:subject/mods:topic',
+    'Topic' => '//mods:mods[1]/mods:subject/mods:topic',
     'Continent' => '//mods:continent',
     'Country' => '//mods:country',
     'Province' => '//mods:province',
