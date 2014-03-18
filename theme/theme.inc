@@ -13,6 +13,7 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   $object = $variables['object'];
   $dsid = $variables['datastream_id'];
   $library_path = libraries_get_path('bookreader');
+  $library_path1 = libraries_get_path('colorbox');
   $module_path = drupal_get_path('module', 'islandora_internet_archive_bookreader');
   $search_uri = module_exists('islandora_solr') ? url("internet_archive_bookreader_search/{$object->id}/TERM", array('absolute' => TRUE)) : NULL;
 
@@ -88,9 +89,9 @@ function islandora_internet_archive_bookreader_preprocess_islandora_internet_arc
   drupal_add_js("$library_path/BookReader/dragscrollable.js", array(
     'group' => JS_LIBRARY,
   ));
-  // Use a newer version of color box as the version bundled with BookReader
+  // Use Drupal version of color box as the version bundled with BookReader
   // won't work with JQuery 1.4.4
-  drupal_add_js("$module_path/js/jquery.colorbox-min.js", array(
+  drupal_add_js("$library_path1/jquery.colorbox-min.js", array(
     'group' => JS_LIBRARY,
   ));
   drupal_add_js("$library_path/BookReader/jquery.bt.min.js", array(
