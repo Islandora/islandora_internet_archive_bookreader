@@ -104,8 +104,10 @@
         var url = this.getDimensionsUri(pid);
         jQuery.ajax({
           url: url,
-          dataType: 'json',
+          dataType: 'string', // Keep it a string so we can massage the data first.
           success: function(data, textStatus, jqXHR) {
+            data = data.replace(/\\/g, '/'); // Backslashes in paths will cause errors. Convert to forwardslashes.
+            data = jQuery.parseJSON(data); // Convert to JSON object.
             dimensions.width = parseInt(data.width);
             dimensions.height = parseInt(data.height);
           },
@@ -329,8 +331,10 @@
     this.removeSearchResults();
     this.showProgressPopup('<img id="searchmarker" src="'+ this.imagesBaseURL + 'marker_srch-on.png'+'">' + Drupal.t('Search results will appear below ...') + '</img>');
     var that = this;
-    $.ajax({url:url, dataType:'json',
+    $.ajax({url:url, dataType:'string', // Keep it a string so we can massage the data first.
             success: function(data, status, xhr) {
+              data = data.replace(/\\/g, '/'); // Backslashes in paths will cause errors. Convert to forwardslashes.
+              data = jQuery.parseJSON(data); // Convert to JSON object.
               that.BRSearchCallback(data);
             },
             error: function() {
