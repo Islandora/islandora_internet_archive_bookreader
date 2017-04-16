@@ -1,6 +1,16 @@
 /**
  * Undo the global css settings from BookReader.css.
  */
+
+/* Override correcting php search on pages */
+/* which shows the IA Bookreader */
+.search-php{
+  float: right;
+  position: absolute !important;
+  top: 105px !important; 
+  right: 10px !important;
+}
+
 div#BookReader {
   position: static;
   overflow: visible;
