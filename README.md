@@ -38,6 +38,10 @@ Set the 'djatoka image compression level', 'Solr field relating pages to book PI
 
 ![Configuration](https://cloud.githubusercontent.com/assets/10052068/24043645/fce70382-0aed-11e7-9e70-11678aa7d1df.png)
 
+The settings for the Internet Archive Book Reader can be altered on a case by case basis via a `hook_preprocess_islandora_internet_archive_bookreader(&$variables)` function.
+
+The array of settings is available in `$variables['settings']` and the array elements are available [here](https://github.com/uml-digitalinitiatives/islandora_internet_archive_bookreader/blob/7.x-ISLANDORA-2129/theme/theme.inc#L34-L58)
+
 ## Documentation
 
 Further documentation for this module is available at [our wiki](https://wiki.duraspace.org/display/ISLANDORA/Islandora+Internet+Archive+Bookreader).

@@ -14,8 +14,6 @@ function template_preprocess_islandora_internet_archive_bookreader(array &$varia
   $object = $variables['object'];
   $dsid = $variables['datastream_id'];
   $library_path = libraries_get_path('bookreader');
-  $colorbox_path = libraries_get_path('colorbox');
-  $module_path = drupal_get_path('module', 'islandora_internet_archive_bookreader');
   $search_uri = module_exists('islandora_solr') ? url("internet_archive_bookreader_search/{$object->id}/TERM", array('absolute' => TRUE)) : NULL;
   $backup_uris = variable_get('islandora_internet_archive_bookreader_use_backup_dsid', FALSE);
 
@@ -43,7 +41,10 @@ function template_preprocess_islandora_internet_archive_bookreader(array &$varia
       'dimensionsUri' => url('internet_archive_bookreader_dimensions/PID', array('absolute' => TRUE)),
       'tokenUri' => url('internet_archive_bookreader_get_image_uri/PID', array('absolute' => TRUE)),
       'djatokaUri' => variable_get('islandora_paged_content_djatoka_url', 'http://localhost:8080/adore-djatoka'),
-      'imagesFolderUri' => url("$base_url/$library_path/BookReader/images/", array('absolute' => TRUE, 'external' => TRUE)),
+      'imagesFolderUri' => url("$base_url/$library_path/BookReader/images/", array(
+        'absolute' => TRUE,
+        'external' => TRUE
+      )),
       'compression' => variable_get('islandora_internet_archive_bookreader_compression', '4'),
       'pageProgression' => $variables['page_progression'],
       'pages' => $pages,
@@ -55,8 +56,18 @@ function template_preprocess_islandora_internet_archive_bookreader(array &$varia
       'useBackupUri' => $backup_uris,
     ),
   );
+  $variables['settings'] = $data_array;
+}
 
-  drupal_add_js($data_array, 'setting');
+function template_process_islandora_internet_archive_bookreader(&$variables) {
+
+  $colorbox_path = libraries_get_path('colorbox');
+  $module_path = drupal_get_path('module', 'islandora_internet_archive_bookreader');
+  $library_path = libraries_get_path('bookreader');
+
+  $settings = $variables['settings'];
+
+  drupal_add_js($settings, 'setting');
   drupal_add_css("$library_path/BookReader/BookReader.css", array(
     'group' => CSS_SYSTEM,
   ));
