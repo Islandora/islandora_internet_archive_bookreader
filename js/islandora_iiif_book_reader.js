@@ -16,8 +16,8 @@
     };
 
     // Inherit from base Islandora bookreader class.
-    jQuery.extend(IslandoraIiifBookReader.prototype, IslandoraBookReader.prototype);
-
+    IslandoraIiifBookReader.prototype =  Object.create(IslandoraBookReader.prototype);
+    IslandoraIiifBookReader.prototype.constructor = IslandoraIiifBookReader;
     /**
      * For a given "accessible page index" return metadata from Djatoka.
      *

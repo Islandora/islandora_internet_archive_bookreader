@@ -97,7 +97,7 @@ function template_preprocess_islandora_internet_archive_bookreader(array &$varia
   // XXX: Extra slash is NOT an error or a mistake. We need to add this JS
   // both before and after our custom jQuery gets setup, as we need it in both
   // instances of jQuery.
-  drupal_add_js("$library_path/BookReader//jquery.bt.min.js", array(
+  drupal_add_js("$library_path/BookReader/jquery.bt.min.js", array(
     'group' => JS_LIBRARY,
     'weight' => -6,
   ));
@@ -108,10 +108,10 @@ function template_preprocess_islandora_internet_archive_bookreader(array &$varia
     )
   );
   // Add the required jQuery version, specifying weight.
-  drupal_add_js("$module_path/js/jquery_1_5.min.js", array(
-    'group' => JS_LIBRARY,
-    'weight' => -6,
-  ));
+  //drupal_add_js("$module_path/js/jquery_1_5.min.js", array(
+    //'group' => JS_LIBRARY,
+    //'weight' => -6,
+  //));
   // We also need to be sure to use the correct jquery ui version.
   drupal_add_js("$module_path/js/jquery.ui-1.8.10/jquery-ui.min.js", array(
     'group' => JS_LIBRARY,
