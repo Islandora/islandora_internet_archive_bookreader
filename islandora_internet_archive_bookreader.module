@@ -220,7 +220,7 @@ function islandora_internet_archive_bookreader_tokens($type, $tokens, array $dat
       $options = array(
         'absolute' => TRUE,
         'language' => language_default(),
-        'https' => FALSE,
+        'https' => drupal_is_https(),
       );
 
       if ($name == 'url_token') {
