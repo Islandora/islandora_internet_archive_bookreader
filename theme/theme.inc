@@ -10,7 +10,6 @@
  */
 function template_preprocess_islandora_internet_archive_bookreader(array &$variables) {
   module_load_include('inc', 'islandora_internet_archive_bookreader', 'includes/utilities');
-  module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/authtokens');
   $object = $variables['object'];
   $dsid = $variables['datastream_id'];
@@ -18,22 +17,12 @@ function template_preprocess_islandora_internet_archive_bookreader(array &$varia
   $colorbox_path = libraries_get_path('colorbox');
   $module_path = drupal_get_path('module', 'islandora_internet_archive_bookreader');
   $search_uri = module_exists('islandora_solr') ? url("internet_archive_bookreader_search/{$object->id}/TERM", array('absolute' => TRUE)) : NULL;
-  $perbook_view_mode = islandora_paged_content_get_viewing_hint($object);
-
-  if (isset($perbook_view_mode)) {
-    $view_mode = $perbook_view_mode == 'paged' ? 2 : 1;
-  }
-  else {
-    // Defaults to global viewer config.
-    $view_mode = (int) variable_get('islandora_internet_archive_bookreader_default_page_view', 1);
-  }
-  $hascover = islandora_paged_content_get_hascover($object) == 'true' ? TRUE : FALSE;
   $page_source = variable_get('islandora_internet_archive_bookreader_pagesource', 'djatoka');
   $page_source_settings = array();
-  $pages = array();
 
   if ($page_source == 'djatoka') {
     $backup_uris = variable_get('islandora_internet_archive_bookreader_use_backup_dsid', FALSE);
+    $pages = array();
     foreach ($variables['pages'] as $page_pid => $info) {
       $addendum = $backup_uris ? array('pid' => $page_pid) : array(
         'uri' => url("islandora/object/{$page_pid}/datastream/{$dsid}/view", array(
@@ -58,6 +47,7 @@ function template_preprocess_islandora_internet_archive_bookreader(array &$varia
   elseif ($page_source == 'iiif') {
     $identifier_string = variable_get('islandora_internet_archive_bookreader_iiif_identifier', '[islandora_iareader:url_token]');
     $iiif_url = file_create_url(rtrim(variable_get('islandora_internet_archive_bookreader_iiif_url', 'iiif'), '/'));
+    $pages = array();
     foreach ($variables['pages'] as $page_pid => $info) {
       $page_info = array(
         'pid' => $page_pid,
@@ -87,10 +77,9 @@ function template_preprocess_islandora_internet_archive_bookreader(array &$varia
       'imagesFolderUri' => url("$base_url/$library_path/BookReader/images/", array('absolute' => TRUE, 'external' => TRUE)),
       'pageProgression' => $variables['page_progression'],
       'overlayOpacity' => variable_get('islandora_internet_archive_bookreader_overlay_opacity', '0.5'),
-      'mode' => $view_mode,
+      'mode' => (int) variable_get('islandora_internet_archive_bookreader_default_page_view', 1),
       'mobilize' => variable_get('islandora_internet_archive_bookreader_mobile_full_screen', FALSE),
       'content_type' => variable_get('islandora_internet_archive_bookreader_content_type', 'book'),
-      'hasCover' => $hascover,
     ) + $page_source_settings,
   );
 
@@ -132,8 +121,8 @@ function template_preprocess_islandora_internet_archive_bookreader(array &$varia
     'group' => JS_LIBRARY,
     'weight' => -6,
   ));
-  // Use a newer version of color box as the version bundled with BookReader.
-  // Won't work with JQuery 1.4.4.
+  // Use a newer version of color box as the version bundled with BookReader
+  // won't work with JQuery 1.4.4
   drupal_add_js("$colorbox_path/jquery.colorbox-min.js", array(
     'group' => JS_LIBRARY,
     'weight' => -6,
@@ -202,7 +191,7 @@ function theme_islandora_internet_archive_bookreader_book_info(array $variables)
   }
   else {
     $fields = islandora_internet_archive_bookreader_info_fields($object);
-    $convert_to_string = function ($o) {
+    $convert_to_string = function($o) {
       return implode('<br/>', $o);
     };
     $fields = array_map($convert_to_string, $fields);
@@ -214,8 +203,7 @@ function theme_islandora_internet_archive_bookreader_book_info(array $variables)
       'colgroups' => array(),
       'header' => array(t('Field'), t('Values')),
       'rows' => $rows,
-      'sticky' => FALSE,
-    ));
+      'sticky' => FALSE));
   }
   return $content;
 }
@@ -256,12 +244,12 @@ function islandora_internet_archive_bookreader_info_fields(AbstractObject $objec
   );
   $xml = simplexml_load_string($object['MODS']->content);
   $xml->registerXPathNamespace('mods', 'http://www.loc.gov/mods/v3');
-  $to_string = function ($o) {
+  $to_string = function($o) {
     return (string) $o;
   };
   // Query each context node with the given xpath.
   $query_each_context = function (array $contexts, $xpath) {
-    $query = function (&$context, $key, $xpath) {
+    $query = function(&$context, $key, $xpath) {
       $context->registerXPathNamespace('mods', 'http://www.loc.gov/mods/v3');
       $context = $context->xpath($xpath);
     };
@@ -272,7 +260,7 @@ function islandora_internet_archive_bookreader_info_fields(AbstractObject $objec
   };
   // Query the given xpath. If the xpath is any array the first value is the
   // xpath for the context node(s) and the second the path to the value fields.
-  $query = function (SimpleXMLElement $xml, $xpath) use (&$query_each_context) {
+  $query = function(SimpleXMLElement $xml, $xpath) use(&$query_each_context) {
     return is_string($xpath) ? $xml->xpath($xpath) : $query_each_context($xml->xpath($xpath[0]), $xpath[1]);
   };
   foreach ($fields as $label => $xpath) {
