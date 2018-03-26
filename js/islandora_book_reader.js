@@ -20,7 +20,6 @@
     this.fullscreen = false;
     this.content_type = settings.content_type;
     this.pageProgression = settings.pageProgression;
-    this.hasCover = settings.hasCover;
   }
 
   // Inherit from Internet Archive BookReader class.
@@ -113,31 +112,19 @@
       // If pageProgression is not set RTL we assume it is LTR
       if (0 == (index & 0x1)) {
         // Even-numbered page
-        if (false === this.hasCover) {
-          return 'L';
-        }
         return 'R';
       }
       else {
         // Odd-numbered page
-         if (false === this.hasCover) {
-          return 'R';
-        }
         return 'L';
       }
     }
     else {
       // RTL
       if (0 == (index & 0x1)) {
-       if (false === this.hasCover) {
-          return 'R';
-        }
         return 'L';
       }
       else {
-        if (false === this.hasCover) {
-          return 'L';
-        }
         return 'R';
       }
     }
