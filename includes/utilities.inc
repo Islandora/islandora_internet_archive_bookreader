@@ -19,7 +19,7 @@ function islandora_internet_archive_bookreader_remap_highlighting_for_bookreader
   foreach ($original_results as $pid => $info) {
     foreach ($info['snippets'] as $snippet => $bounding_boxes) {
       $match = array(
-        'text' => preg_replace('/[^a-zA-Z0-9-\n {}]/', '', $snippet),
+        'text' => preg_replace('/[^a-zA-Z0-9-\n {}]/', '', strip_tags($snippet)),
         'par' => array(
           array(
             'page' => intval($info['page']['sequence_number']),
