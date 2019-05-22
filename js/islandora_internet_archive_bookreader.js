@@ -39,6 +39,9 @@ Drupal.settings.islandoraInternetArchiveBookReader_jQuery = jQuery.noConflict(tr
         if ($.browser.mobile && settings.islandoraInternetArchiveBookReader.mobilize) {
           bookReader.goFullScreen();
         }
+        else if (settings.islandoraInternetArchiveBookReader.mode) {
+          bookReader.switchMode(settings.islandoraInternetArchiveBookReader.mode);
+        }
       });
     }
   };
