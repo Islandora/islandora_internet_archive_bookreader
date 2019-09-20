@@ -954,7 +954,7 @@ IslandoraBookReader.prototype.blankFulltextDiv = function() {
        return;
      }
      // Call the original Method.
-     return BookReader.prototype.paramsFromFragment(urlFragment);
+     return BookReader.prototype.paramsFromFragment.call(this, urlFragment);
    }
   // Overrides buildShareDiv().
    IslandoraBookReader.prototype.buildShareDiv = function(jShareDiv) {
