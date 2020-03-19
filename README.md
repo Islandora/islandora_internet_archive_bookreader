@@ -33,7 +33,7 @@ Install as usual, see [this](https://drupal.org/documentation/install/modules-th
 
 Download the 2.0.2 version of the [Internet Archive BookReader](https://github.com/internetarchive/bookreader/tree/2.0.2)* to `sites/all/libraries/bookreader`, or run `drush iabookreader-plugin`. If you are upgrading from the 7.x-1.11 or older version of this module, you will need to replace your old copy of this library. *(Newer versions than 2.0.2 may work but have not been tested.)*
 
-This module requires that you set up either Djatoka or an IIIF Image API compliant Image Sever. For Djatoka please follow the steps outlined at [here](https://wiki.duraspace.org/display/ISLANDORA/Djatoka).
+This module requires that you set up either Djatoka or an IIIF Image API compliant Image Sever under Administration -> Islandora -> Image Server Configuration.
 
 This module requires [Colorbox](https://www.drupal.org/project/colorbox) and its dependant library [Colorbox library](http://www.jacklmoore.com/colorbox/). Depending on the version of the Colorbox module and library you are using, there can be some issues with Colorbox finding the library. [This](https://www.drupal.org/node/1074474#comment-9137159) comment solves the issue.
 

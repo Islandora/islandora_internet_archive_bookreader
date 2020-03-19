@@ -10,7 +10,6 @@
  */
 function islandora_internet_archive_bookreader_uninstall() {
   $variables = array(
-    'islandora_internet_archive_bookreader_djatoka_url',
     'islandora_internet_archive_bookreader_compression',
     'islandora_internet_archive_bookreader_ocr_field',
     'islandora_internet_archive_bookreader_ocr_filter_field',
@@ -18,11 +17,37 @@ function islandora_internet_archive_bookreader_uninstall() {
     'islandora_internet_archive_bookreader_sequence_number',
     'islandora_internet_archive_bookreader_overlay_opacity',
     'islandora_internet_archive_bookreader_default_page_view',
-    'islandora_internet_archive_bookreader_iiif_url',
-    'islandora_internet_archive_bookreader_iiif_token_header',
-    'islandora_internet_archive_bookreader_iiif_identifier',
-    'islandora_internet_archive_bookreader_pagesource',
   );
   // Delete the Drupal variables defined by this module.
   array_walk($variables, 'variable_del');
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function islandora_internet_archive_bookreader_update_dependencies() {
+    $dependencies = array(
+      'islandora_internet_archive_bookreader' => array(
+        7001 => array(
+          'islandora' => 7003,
+        ),
+      ),
+    );
+    return $dependencies;
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove local imageserver settings, these are now in core Islandora.
+ */
+function islandora_internet_archive_bookreader_update_7001() {
+    $vars = array(
+        'islandora_internet_archive_bookreader_djatoka_url',
+        'islandora_internet_archive_bookreader_iiif_url',
+        'islandora_internet_archive_bookreader_iiif_token_header',
+        'islandora_internet_archive_bookreader_iiif_identifier',
+        'islandora_internet_archive_bookreader_pagesource',
+    );
+    array_walk($vars, 'variable_del');
 }

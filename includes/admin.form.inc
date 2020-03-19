@@ -17,21 +17,13 @@
  *   The Drupal form definition.
  */
 function islandora_internet_archive_bookreader_admin_settings_form(array $form, array &$form_state) {
+  form_load_include($form_state, 'inc', 'islandora', 'includes/imageserver');
   $get_default_value = function($name, $default) use($form_state) {
     return isset($form_state['values'][$name]) ? $form_state['values'][$name] : variable_get($name, $default);
   };
   $solr_enabled = module_exists('islandora_solr');
   $form = array(
-    'islandora_internet_archive_bookreader_pagesource' => array(
-      '#type' => 'select',
-      '#title' => t('Image Server'),
-      '#description' => t('Select the image server to use with IA Bookreader'),
-      '#default_value' => variable_get('islandora_internet_archive_bookreader_pagesource', 'djatoka'),
-      '#options' => array(
-        'djatoka' => t('Adore-Djatoka Image Server'),
-        'iiif' => t('IIIF Image Server'),
-      ),
-    ),
+    'islandora_internet_archive_bookreader_pagesource' => islandora_imageserver_get_type_selectbox(),
     'djatoka' => array(
       '#type' => 'fieldset',
       '#title' => t('Adore Djatoka Image Server Settings'),
@@ -53,47 +45,6 @@ function islandora_internet_archive_bookreader_admin_settings_form(array $form, 
         '#title' => t('Use the JPG datastream as a backup'),
         '#description' => t('Djatoka will not return JP2s smaller than 4096 bytes; by checking this, the bookreader will run a check and use the JPG datastream instead. NOTE: applying this setting can slow the bookreader down, especially for busy sites or large books. Be sure only to use this if necessary.'),
         '#default_value' => variable_get('islandora_internet_archive_bookreader_use_backup_dsid', FALSE),
-      ),
-    ),
-    'iiif' => array(
-      '#type' => 'fieldset',
-      '#title' => t('IIIF Image Server Settings'),
-      '#description' => t('Settings for IIIF Image Server'),
-      '#states' => array(
-        'visible' => array(
-          ':input[name="islandora_internet_archive_bookreader_pagesource"]' => array('value' => 'iiif'),
-        ),
-      ),
-      'islandora_internet_archive_bookreader_iiif_url' => array(
-        '#prefix' => '<div id="islandora-openseadragon-iiif-path-wrapper">',
-        '#suffix' => '</div>',
-        '#type' => 'textfield',
-        '#title' => t('IIIF Image Server Base URL'),
-        '#default_value' => variable_get('islandora_internet_archive_bookreader_iiif_url', 'iiif'),
-        '#description' => t('The location of the IIIF Image Server.'),
-      ),
-      'islandora_internet_archive_bookreader_iiif_token_header' => array(
-        '#type' => 'checkbox',
-        '#title' => t('Add token as header'),
-        '#default_value' => variable_get('islandora_internet_archive_bookreader_iiif_token_header', FALSE),
-        '#description' => t('Instead of sending the token as a query parameter, it will be sent in the X-ISLANDORA-TOKEN header.'),
-      ),
-      'islandora_internet_archive_bookreader_iiif_identifier' => array(
-        '#type' => 'textfield',
-        '#title' => t('IIIF Identifier'),
-        '#default_value' => variable_get('islandora_internet_archive_bookreader_iiif_identifier', '[islandora_iareader:url_token]'),
-        '#element_validate' => array('token_element_validate'),
-        '#token_types' => array('islandora_iareader'),
-      ),
-      'islandora_internet_archive_bookreader_iiif_token_tree' => array(
-        '#type' => 'fieldset',
-        '#title' => t('Replacement patterns'),
-        '#collapsible' => TRUE,
-        '#collapsed' => TRUE,
-        '#description' => theme('token_tree', array(
-          'token_types' => array('islandora_iareader'),
-          'global_types' => FALSE,
-        )),
       ),
     ),
     'islandora_internet_archive_bookreader_ocr_filter_field' => array(

@@ -14,8 +14,10 @@
 /**
  * Fetches page metadata for use in the viewer such as width and height.
  *
- * Prints a JSON object repersenting the metadata.
+ * Prints a JSON object representing the metadata.
  * This function exits.
+ *
+ * Called from islandora_djatoka_book_reader.js.
  *
  * @param AbstractObject $object
  *   The page object to fetch the metadata from.
@@ -88,8 +90,10 @@ function islandora_internet_archive_bookreader_search_callback($object_id, $term
  *   The DSID of the object with JP2/JPG datastreams.
  */
 function islandora_internet_archive_bookreader_get_image_uri_callback($object_id) {
+  module_load_include('inc', 'islandora', 'includes/imageserver');
   $dsid = 'JP2';
-  if (variable_get('islandora_internet_archive_bookreader_use_backup_dsid', FALSE)) {
+  if (variable_get('islandora_internet_archive_bookreader_use_backup_dsid', FALSE) &&
+    islandora_imageserver_get_settings()['type'] == 'djatoka') {
     // TODO: We _think_ that Djatoka won't accept JP2s under 4 kibibytes, but
     // it's unclear if that number is configured, or tied to something, or even
     // if it's correct. We should investigate and make sure it's accurate.
